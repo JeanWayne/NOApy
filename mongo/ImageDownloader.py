@@ -47,7 +47,7 @@ for f in findings:
 			publisher = "Frontiers"
 		path = publisher + '/' + pathJournalName + '/' + year + '/' + Dumb_DOI + '/'
 		root = "images/"
-		path2 = root + path
+		path2 = root + path   
 		imagecount += 1
 		if download:
 			if not os.path.exists(path2):

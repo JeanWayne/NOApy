@@ -18,7 +18,7 @@ download = False
 write2File = False
 write2Collection = True
 target_col = db['Images_21_11_2017']
-##########
+###########
 findings = collection.find({"numOfFindings": {"$gt": 0}}, no_cursor_timeout=True)
 for f in findings:
 	journalName = str(f['journalName'])

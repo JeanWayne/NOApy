@@ -17,7 +17,7 @@ i_skipped = 0
 download = False
 write2File = False
 write2Collection = True
-target_col = db['Images_26_1_2018']
+target_col = db['Images_21_11_2017']
 ##########
 findings = collection.find({"numOfFindings": {"$gt": 0}}, no_cursor_timeout=True)
 for f in findings:
@@ -39,8 +39,12 @@ for f in findings:
 			publisher = "Springer"
 		elif "PubMed" in path2file:
 			publisher = "PubMed"
+		elif "PMC" in path2file:
+			publisher = "PubMed"
 		elif "Copernicus" in publisher:
 			publisher = "Copernicus"
+		elif "frontiers" in path2file:
+			publisher = "Frontiers"
 		path = publisher + '/' + pathJournalName + '/' + year + '/' + Dumb_DOI + '/'
 		root = "images/"
 		path2 = root + path
@@ -64,7 +68,7 @@ for f in findings:
 			print("wrote #" + str(current))
 			current += 1
 		elif write2File:
-			with open("C:\Image_Files_URLS_betaCorpus_v3.txt", 'a', encoding="utf-8") as myfile:
+			with open("E:\Image_Files_URLS_betaCorpus_v4.txt", 'a', encoding="utf-8") as myfile:
 				print(path)
 				print(URL)
 				myfile.write(URL + " " + root + path + str(findingID) + ".jpg" + "\n")
@@ -72,15 +76,20 @@ for f in findings:
 			DOI = str(Dumb_DOI).replace('_', '/')
 
 			document = {"journalName": journalName,
-			            "year": year,
-			            "DOI": DOI,
-			            "title": f['title'],
-			            "authors": f['authors'],
-			            "URL": j['URL2Image'],
-			            "TIB_URL": root + path + str(findingID) + ".jpg",
-			            "CaptionBody": j['captionBody'],
-			            "CaptionTitle": j['captionTitle']
-			            }
+						"year": year,
+						"DOI": DOI,
+						"title": f['title'],
+						"authors": f['authors'],
+						"URL": j['URL2Image'],
+						"TIB_URL": root + path + str(findingID) + ".jpg",
+						"CaptionBody": j['captionBody'],
+						"CaptionTitle": j['captionTitle'],
+						"Context": j["context"],
+						"CopyrightFlag": j['Copyrightflag'],
+						"License": f["license"],
+						"LicenseType": f["LicenseType"]
+						}
+			print(DOI)
 			if 'v1_label' in j:
 				label=str(j['v1_label'])
 				if label=="chart":

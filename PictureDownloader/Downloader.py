@@ -1,9 +1,9 @@
 import os
-
-from pymongo import MongoClient
 import urllib.request
 
-client = MongoClient('141.71.5.19', 27017)
+from pymongo import MongoClient
+
+client = MongoClient('ENTER IP ADRESS TO MONGO', PORT)
 db = client['workshop']
 collection = db['hindawi_1486555684003']
 db_size= collection.find().count()

@@ -1,12 +1,11 @@
+import os
 import urllib
+from urllib import request
 
 from pymongo import MongoClient
-from urllib import request
-import os
-
 
 current = 0
-client = MongoClient('141.71.5.19', 27017)
+client = MongoClient('ENTER IP ADRESS TO MONGO', PORT)
 db = client['beta']
 ##### Read Collection
 collection = db['Corpus_Playground']

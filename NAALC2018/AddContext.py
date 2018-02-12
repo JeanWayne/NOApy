@@ -1,8 +1,9 @@
-import re
-from nltk.corpus import stopwords
-import nltk
-import json
 import codecs
+import json
+import re
+
+import nltk
+from nltk.corpus import stopwords
 from pymongo import MongoClient
 
 loc_for_abb='C:\Abbr\Abbreviations\examples.txt'
@@ -64,7 +65,7 @@ csv.close()
 
 #################
 
-client = MongoClient('141.71.5.19', 27017)
+client = MongoClient('ENTER IP ADRESS TO MONGO', PORT)
 db = client['beta']
 collection = db['Corpus_Playground']
 #res=collection.find({"Exception":{"$exists": False}, "DOI":data[3][2]}, no_cursor_timeout=True)

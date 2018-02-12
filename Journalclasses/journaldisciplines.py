@@ -1,6 +1,4 @@
 import re
-from nltk.corpus import stopwords
-import re
 
 from nltk.corpus import stopwords
 
@@ -40,8 +38,8 @@ j2c = readjournalclasses(f)
 
 from pymongo import MongoClient
 
-client = MongoClient('mongodb://141.71.5.19:27017/')
-# client = MongoClient('mongodb://localhost:27017/')
+client = MongoClient('mongodb://ENTER IP ADRESS TO MONGO:PORT')
+
 
 db = client.beta
 # collection = db.Test20_9

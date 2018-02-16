@@ -6,7 +6,7 @@ import os
 
 
 current = 0
-client = MongoClient('141.71.5.19', 27017)
+client = MongoClient('localhost', 27017)
 db = client['beta']
 ##### Read Collection
 collection = db['Corpus_Playground']
@@ -17,7 +17,7 @@ i_skipped = 0
 download = False
 write2File = False
 write2Collection = True
-target_col = db['Images_29_1_2018']
+target_col = db['Images']
 ##########
 findings = collection.find({"numOfFindings": {"$gt": 0}}, no_cursor_timeout=True)
 for f in findings:

@@ -1,11 +1,11 @@
 #by jeanch based on pytorch transfer learning tutorial
+from __future__ import print_function, division
 
 import os
 import copy
 import matplotlib.pyplot as plt
 import time
 import numpy as np
-from __future__ import print_function, division
 import torch
 import torchvision
 import torch.nn as nn
@@ -27,13 +27,13 @@ plt.ion()   # activate interactive mode
 
 data_transforms = {
     'train': transforms.Compose([
-        transforms.RandomSizedCrop(224),
+        transforms.RandomResizedCrop(224),
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ]),
     'val': transforms.Compose([
-        transforms.Scale(256),
+        transforms.Resize(256),
         transforms.CenterCrop(224),
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
@@ -160,6 +160,7 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
 
     # load best model weights
     model.load_state_dict(best_model_wts)
+    torch.save(best_model_wts, 'noa_image_model_v2.pt')
     return model
 
 
@@ -217,10 +218,13 @@ exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=7, gamma=0.1)
 ############
 # Train and evaluate
 ############
-model_ft = train_model(model_ft, criterion, optimizer_ft, exp_lr_scheduler, num_epochs=5)
+model_ft = train_model(model_ft, criterion, optimizer_ft, exp_lr_scheduler, num_epochs=10)
 ############
-
 visualize_model(model_ft)
+plt.ioff()
+plt.show()
+
+
 
 ############
 # ConvNet as fixed feature extractor
@@ -234,43 +238,43 @@ visualize_model(model_ft)
 ############
 
 
-model_conv = torchvision.models.resnet18(pretrained=True)
-for param in model_conv.parameters():
-    param.requires_grad = False
-
-# Parameters of newly constructed modules have requires_grad=True by default
-
-num_ftrs = model_conv.fc.in_features
-model_conv.fc = nn.Linear(num_ftrs, 5)
-
-if use_gpu:
-    model_conv = model_conv.cuda()
-
-criterion = nn.CrossEntropyLoss()
-
-# Observe that only parameters of final layer are being optimized as opoosed to before.
-optimizer_conv = optim.SGD(model_conv.fc.parameters(), lr=0.001, momentum=0.9)
-
-# Decay LR by a factor of 0.1 every 7 epochs
-exp_lr_scheduler = lr_scheduler.StepLR(optimizer_conv, step_size=7, gamma=0.1)
-
-
-############
-# Train and evaluate
+# model_conv = torchvision.models.resnet18(pretrained=True)
+# for param in model_conv.parameters():
+#     param.requires_grad = False
 #
-# On CPU this will take about half the time compared to previous scenario.
-# This is expected as gradients don't need to be computed for most of the
-# network. However, forward does need to be computed.
-############
-
-
-
-model_conv = train_model(model_conv, criterion, optimizer_conv,
-                         exp_lr_scheduler, num_epochs=25)
-
-############
-
-visualize_model(model_conv)
-
-plt.ioff()
-plt.show()
+# # Parameters of newly constructed modules have requires_grad=True by default
+#
+# num_ftrs = model_conv.fc.in_features
+# model_conv.fc = nn.Linear(num_ftrs, 5)
+#
+# if use_gpu:
+#     model_conv = model_conv.cuda()
+#
+# criterion = nn.CrossEntropyLoss()
+#
+# # Observe that only parameters of final layer are being optimized as opoosed to before.
+# optimizer_conv = optim.SGD(model_conv.fc.parameters(), lr=0.001, momentum=0.9)
+#
+# # Decay LR by a factor of 0.1 every 7 epochs
+# exp_lr_scheduler = lr_scheduler.StepLR(optimizer_conv, step_size=7, gamma=0.1)
+#
+#
+# ############
+# # Train and evaluate
+# #
+# # On CPU this will take about half the time compared to previous scenario.
+# # This is expected as gradients don't need to be computed for most of the
+# # network. However, forward does need to be computed.
+# ############
+#
+#
+#
+# model_conv = train_model(model_conv, criterion, optimizer_conv,
+#                          exp_lr_scheduler, num_epochs=25)
+#
+# ############
+#
+# visualize_model(model_conv)
+#
+# plt.ioff()
+# plt.show()

@@ -13,7 +13,8 @@ model_ft.fc = torch.nn.Linear(num_ftrs, 5)
 if use_gpu:
     model_ft = model_ft.cuda()
     print("!!! Running with GPU POWER !!!")
-
+else:
+    print("??? Y NO GPU POWER ???")
 model_ft.load_state_dict(torch.load("noa_image_model_v2.pt"))
 model=model_ft
 #model = torch.load('noa_image_model_v2.pt')

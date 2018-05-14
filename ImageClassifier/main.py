@@ -1,9 +1,17 @@
-from keras.models import load_model
-from keras.preprocessing.image import ImageDataGenerator, array_to_img, img_to_array, load_img
-import matplotlib.pyplot as plt
+from __future__ import print_function, division
+
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.autograd import Variable
 import numpy as np
+import torchvision
+import matplotlib.pyplot as plt
+import time
 import os
-import os.path
+import copy
+
+plt.ion()  # interactive mode
 from pymongo import MongoClient
 import pymongo
 
@@ -15,16 +23,21 @@ def giveLabel(s):
     else:
         return "nonChart"
 
+
+a = "ab"
+print(a)
 # In[8]: Load Model
 
-model=load_model("/home/noa/ImageDownloader/InceptionV3_0.06873_1000_4_1000_4.h5")
+# model=load_model("/home/noa/ImageDownloader/InceptionV3_0.06873_1000_4_1000_4.h5")
+model = torch.load("/home/noa/ImageDownloader/noa_image_model_v2.pt")
 ## Init Database connection
 ###############
 client = MongoClient('141.71.5.19', 27017)
-db = client['beta']
+# db = client['beta']
+db = client['Classifier_Test']
+
 minlength = 1
-collection = db['Corpus_Playground']
-#collection = db['test']
+collection = db['Corpus']
 #paper = collection.find({"numOfFindings":{"$gt":0}},no_cursor_timeout=True)
 number = collection.find({"numOfFindings": {"$gt" : 0}, "findings.v1_chart_weights" :
     {"$exists": False}}, no_cursor_timeout=True).count()
@@ -64,22 +77,24 @@ for p in paper:
             s = model.predict(x)
 
             label=giveLabel(s)
-            collection.update(
-            {"_id": p['_id'], "findings.findingID": findingID},
-            {
-                "$set" : {"findings.$.v1_label":label}
-            })
-
-            collection.update(
-            {"_id": p['_id'], "findings.findingID": findingID},
-            {
-                "$set" : {"findings.$.v1_chart_weights" : s[0].tolist()[0]}
-            })
-            collection.update(
-            {"_id": p['_id'], "findings.findingID": findingID},
-            {
-                "$set" : {"findings.$.v1_nonChart_weight:" : s[0].tolist()[1]}
-            })
+            print(label)
+            print(s)
+            # collection.update(
+            # {"_id": p['_id'], "findings.findingID": findingID},
+            # {
+            #     "$set" : {"findings.$.v1_label":label}
+            # })
+            #
+            # collection.update(
+            # {"_id": p['_id'], "findings.findingID": findingID},
+            # {
+            #     "$set" : {"findings.$.v1_chart_weights" : s[0].tolist()[0]}
+            # })
+            # collection.update(
+            # {"_id": p['_id'], "findings.findingID": findingID},
+            # {
+            #     "$set" : {"findings.$.v1_nonChart_weight:" : s[0].tolist()[1]}
+            # })
 
         except:
             print("Error @ "+str(p['_id']))

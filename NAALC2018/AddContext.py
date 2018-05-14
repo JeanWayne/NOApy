@@ -6,7 +6,7 @@ import nltk
 from nltk.corpus import stopwords
 from pymongo import MongoClient
 
-loc_for_abb='C:\Abbr\Abbreviations\examples.txt'
+loc_for_abb = 'abb_1520941690603.txt'
 abb_norm_loc='C:\Abbr/abbreviations_normalized.json'
 write_file_loc='C:\Abbr/'
 
@@ -65,7 +65,7 @@ csv.close()
 
 #################
 
-client = MongoClient('ENTER IP ADRESS TO MONGO', PORT)
+client = MongoClient('141.71.5.19', 27017)
 db = client['beta']
 collection = db['Corpus_Playground']
 #res=collection.find({"Exception":{"$exists": False}, "DOI":data[3][2]}, no_cursor_timeout=True)
@@ -79,7 +79,7 @@ lessThen=0
 
 countDOIerror=0
 print(len(data))
-with open(write_file_loc+'ex_3_15_.context.txt', 'a',encoding="utf8") as the_file:
+with open(write_file_loc + '13.03.context.txt', 'a', encoding="utf8") as the_file:
 	for i in range(len(data)):
 		content=""
 		if data[i][2] is "":

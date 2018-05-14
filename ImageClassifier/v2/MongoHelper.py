@@ -14,6 +14,9 @@ print(number)
 numbertw = JournalC.find({"image_class": {"$exists": False}}).count()
 print(numbertw)
 
+def unsetLabels():
+	ImagesC.update({}, {"$unset": {"image_class":1}} , {"multi": True});
+
 
 def getPathForImage(DBObjectName):
 	o = ObjectId(DBObjectName)

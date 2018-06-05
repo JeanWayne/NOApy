@@ -19,8 +19,7 @@ def getLabelName(i):
         return "vis"
 
 def getImageClass(path):
-    img = Image.open(path)
-    img_tensor = preprocess(img)
+	img_tensor = preprocess(img)
     img_tensor.unsqueeze_(0)
     input= Variable(img_tensor).type(torch.FloatTensor).cuda()
     output = model(input)

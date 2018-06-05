@@ -8,17 +8,18 @@ client = MongoClient('141.71.5.22', 27017)
 db = client['migration']
 dbn = client['NewSchema']
 ##### Read Collection
-collection_pg = db['Corpus_Playground']
+# collection_pg = db['Corpus_Playground']
+collection_pg = db['Corpus2b']
 collection_im = dbn['Corpus_Image_1526627740266']
 size = collection_pg.find().count()
 imagecount = 0
-wpterms_missing = 0
+wpterms_missing =0
 i_skipped = 0
 ######
 download = False
 write2File = False
 write2Collection = True
-target_col = dbn['NewImages_v2']
+target_col = dbn['NewImages_v3_Part_2']
 ##########
 findings = collection_pg.find({"numOfFindings": {"$gt": 0}}, no_cursor_timeout=True)
 for f in findings:
@@ -38,10 +39,14 @@ for f in findings:
 			publisher = "Hindawi"
 		elif "Springer" in path2file:
 			publisher = "Springer"
+		elif "PMC" in path2file:
+			publisher = "PubMed"
 		elif "PubMed" in path2file:
 			publisher = "PubMed"
 		elif "Copernicus" in publisher:
 			publisher = "Copernicus"
+		elif "frontiers" in path2file:
+			publisher = "Frontiers"
 		path = publisher + '/' + pathJournalName + '/' + year + '/' + Dumb_DOI + '/'
 		root = "images/"
 		path2 = root + path
@@ -85,7 +90,7 @@ for f in findings:
 				            "wpcats": j['wpcats']
 				            }
 			except KeyError:
-				wpterms_missing += 1
+				wpterms_missing +=1
 				document = {"journalName": journalName,
 				            "publisher": f['publisher'],
 				            "year": year,
@@ -112,16 +117,18 @@ for f in findings:
 					imageClass = "Photo"
 				if imageClass == "vis":
 					imageClass = "Drawing"
+				elif "ERROR" in imageClass:
+					imageClass = ""
 				document['ImageType'] = imageClass
 
 			# if 'v1_label' in j:
 			# 	label=str(j['v1_label'])
 			# 	if label=="chart":
 			# 		document['ImageType']="chart"
-			# 	elif label=="nonChart":
+			# elif label=="nonChart":
 			# 		document['ImageType']="picture"
 			if 'acronym' in j:
-				arr = []
+				arr =[]
 				for acc in j['acronym']:
 					arr.append(acc[1])
 				document["Expanded"] = arr
@@ -136,3 +143,4 @@ print("end")
 print("{} wpterms were missing".format(wpterms_missing))
 print(imagecount)
 print("Image URLs found")
+

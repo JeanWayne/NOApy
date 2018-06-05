@@ -45,6 +45,9 @@ for f in findings:
 			publisher = "Copernicus"
 		elif "frontiers" in path2file:
 			publisher = "Frontiers"
+		elif "Frontiers" in path2file:
+			publisher = "Frontiers"
+
 		path = publisher + '/' + pathJournalName + '/' + year + '/' + Dumb_DOI + '/'
 		root = "images/"
 		path2 = root + path
